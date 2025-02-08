@@ -32,15 +32,25 @@ const commonCriteria = {
       template: 'Participants must be adults aged 18 years or older',
     },
     {
-      id: 'english-lang',
-      label: 'English Language',
-      template: 'Study must be published in English',
+      id: 'randomized-control-studies',
+      label: 'Randomized Control Studies',
+      template: 'Study must be a randomized control study',
     },
     {
-      id: 'peer-reviewed',
-      label: 'Peer-Reviewed',
-      template: 'Study must be peer-reviewed and published in academic journals',
+      id: 'systematic-reviews-only',
+      label: 'Systematic Reviews Only',
+      template: 'Study must be a systematic review',
     },
+    {
+      id: 'systematic-reviews-meta-analysis ',
+      label: 'Systematic Reviews and Meta-Analysis',
+      template: 'Study must be a systematic review or meta-analysis',
+    },
+
+
+
+
+
   ],
   exclusion: [
     {
@@ -73,16 +83,15 @@ export function CriteriaModal() {
   const [selectedExclusion, setSelectedExclusion] = useState<string[]>([]);
 
   const handleInclusionSelect = (id: string, checked: boolean) => {
-    setSelectedInclusion(prev => {
-      if (checked) {
-        const template = commonCriteria.inclusion.find(c => c.id === id)?.template;
-        setInclusionCriteria(prev => 
-          prev ? `${prev}\n- ${template}` : `- ${template}`
-        );
-        return [...prev, id];
-      }
-      return prev.filter(item => item !== id);
-    });
+    if (checked) {
+      const template = commonCriteria.inclusion.find(c => c.id === id)?.template;
+      setInclusionCriteria(prev => 
+        prev ? `${prev}\n- ${template}` : `- ${template}`
+      );
+      setSelectedInclusion(prev => [...prev, id]);
+    } else {
+      setSelectedInclusion(prev => prev.filter(item => item !== id));
+    }
   };
 
   const handleExclusionSelect = (id: string, checked: boolean) => {
@@ -108,92 +117,94 @@ export function CriteriaModal() {
       </DialogTrigger>
 
 
-      <DialogContent className="max-w-2xl">
+      <DialogContent className="max-w-4xl h-[80vh]">
         <DialogHeader>
           <DialogTitle>Define Screening Criteria</DialogTitle>
         </DialogHeader>
-        <Tabs defaultValue="inclusion" className="w-full">
-          <TabsList className="grid w-full grid-cols-2">
-            <TabsTrigger value="inclusion">Inclusion Criteria</TabsTrigger>
-            <TabsTrigger value="exclusion">Exclusion Criteria</TabsTrigger>
-          </TabsList>
-          <TabsContent value="inclusion" className="space-y-4">
-            <div className="space-y-4">
-              <div>
-                <Label>Common Inclusion Criteria</Label>
-                <ScrollArea className="h-[120px] border rounded-md p-4">
-                  <div className="space-y-2">
-                    {commonCriteria.inclusion.map((criteria) => (
-                      <div key={criteria.id} className="flex items-center space-x-2">
-                        <Checkbox
-                          id={criteria.id}
-                          checked={selectedInclusion.includes(criteria.id)}
-                          onCheckedChange={(checked) => 
-                            handleInclusionSelect(criteria.id, checked as boolean)
-                          }
-                        />
-                        <label
-                          htmlFor={criteria.id}
-                          className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
-                        >
-                          {criteria.label}
-                        </label>
-                      </div>
-                    ))}
-                  </div>
-                </ScrollArea>
+        <div className="flex-1 overflow-y-auto">
+          <Tabs defaultValue="inclusion" className="w-full">
+            <TabsList className="grid w-full grid-cols-2">
+              <TabsTrigger value="inclusion">Inclusion Criteria</TabsTrigger>
+              <TabsTrigger value="exclusion">Exclusion Criteria</TabsTrigger>
+            </TabsList>
+            <TabsContent value="inclusion" className="space-y-4">
+              <div className="space-y-4">
+                <div>
+                  <Label>Common Inclusion Criteria</Label>
+                  <ScrollArea className="h-[200px] border rounded-md p-4">
+                    <div className="space-y-2">
+                      {commonCriteria.inclusion.map((criteria) => (
+                        <div key={criteria.id} className="flex items-center space-x-2">
+                          <Checkbox
+                            id={criteria.id}
+                            checked={selectedInclusion.includes(criteria.id)}
+                            onCheckedChange={(checked) => 
+                              handleInclusionSelect(criteria.id, checked as boolean)
+                            }
+                          />
+                          <label
+                            htmlFor={criteria.id}
+                            className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+                          >
+                            {criteria.label}
+                          </label>
+                        </div>
+                      ))}
+                    </div>
+                  </ScrollArea>
+                </div>
+                <Separator />
+                <div className="space-y-2">
+                  <Label>Custom Inclusion Criteria</Label>
+                  <Textarea
+                    placeholder="Enter each criterion on a new line, starting with '- '"
+                    value={inclusionCriteria}
+                    onChange={(e) => setInclusionCriteria(e.target.value)}
+                    className="min-h-[250px]"
+                  />
+                </div>
               </div>
-              <Separator />
-              <div className="space-y-2">
-                <Label>Custom Inclusion Criteria</Label>
-                <Textarea
-                  placeholder="Enter each criterion on a new line, starting with '- '"
-                  value={inclusionCriteria}
-                  onChange={(e) => setInclusionCriteria(e.target.value)}
-                  className="min-h-[200px]"
-                />
+            </TabsContent>
+            <TabsContent value="exclusion" className="space-y-4">
+              <div className="space-y-4">
+                <div>
+                  <Label>Common Exclusion Criteria</Label>
+                  <ScrollArea className="h-[200px] border rounded-md p-4">
+                    <div className="space-y-2">
+                      {commonCriteria.exclusion.map((criteria) => (
+                        <div key={criteria.id} className="flex items-center space-x-2">
+                          <Checkbox
+                            id={criteria.id}
+                            checked={selectedExclusion.includes(criteria.id)}
+                            onCheckedChange={(checked) => 
+                              handleExclusionSelect(criteria.id, checked as boolean)
+                            }
+                          />
+                          <label
+                            htmlFor={criteria.id}
+                            className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+                          >
+                            {criteria.label}
+                          </label>
+                        </div>
+                      ))}
+                    </div>
+                  </ScrollArea>
+                </div>
+                <Separator />
+                <div className="space-y-2">
+                  <Label>Custom Exclusion Criteria</Label>
+                  <Textarea
+                    placeholder="Enter each criterion on a new line, starting with '- '"
+                    value={exclusionCriteria}
+                    onChange={(e) => setExclusionCriteria(e.target.value)}
+                    className="min-h-[250px]"
+                  />
+                </div>
               </div>
-            </div>
-          </TabsContent>
-          <TabsContent value="exclusion" className="space-y-4">
-            <div className="space-y-4">
-              <div>
-                <Label>Common Exclusion Criteria</Label>
-                <ScrollArea className="h-[120px] border rounded-md p-4">
-                  <div className="space-y-2">
-                    {commonCriteria.exclusion.map((criteria) => (
-                      <div key={criteria.id} className="flex items-center space-x-2">
-                        <Checkbox
-                          id={criteria.id}
-                          checked={selectedExclusion.includes(criteria.id)}
-                          onCheckedChange={(checked) => 
-                            handleExclusionSelect(criteria.id, checked as boolean)
-                          }
-                        />
-                        <label
-                          htmlFor={criteria.id}
-                          className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
-                        >
-                          {criteria.label}
-                        </label>
-                      </div>
-                    ))}
-                  </div>
-                </ScrollArea>
-              </div>
-              <Separator />
-              <div className="space-y-2">
-                <Label>Custom Exclusion Criteria</Label>
-                <Textarea
-                  placeholder="Enter each criterion on a new line, starting with '- '"
-                  value={exclusionCriteria}
-                  onChange={(e) => setExclusionCriteria(e.target.value)}
-                  className="min-h-[200px]"
-                />
-              </div>
-            </div>
-          </TabsContent>
-        </Tabs>
+            </TabsContent>
+          </Tabs>
+        </div>
       </DialogContent>
     </Dialog>
   );
