@@ -1,0 +1,8 @@
+Nextjs frontend, python backend. I want to build a tool to help screen papers for a systematic review. The inputs will be a RIS file (containing meta data of the studies) and the user's inclusion and exclusion criteria. The API will send the RIS file along with the user’s inclusion/exclusion criteria.
+
+The idea is:
+1) The RIS file is parsed into individual studies meta data (using rispy)
+2) individual studies’ Title, Abstract and Keywords (tiabkw). 
+3) The tiabkw of each study is sent to chatGPT one at a time where the agent makes the decision on wether to either INCLUDE, MAYBE or EXCLUDE that study based on specific inclusion and or exclusion criteria. 
+
+Can you think along from a top down approach wether this is possible and suggest some additional steps or steps I may have not thought about.”

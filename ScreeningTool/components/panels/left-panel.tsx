@@ -4,7 +4,9 @@ import { FileUpload } from '@/components/upload/file-upload';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { useWorkflow } from '@/context/workflow-context';
-import { FileText, Settings, Download } from 'lucide-react';
+import { FileText, Settings, Download, Info } from 'lucide-react';
+import { Separator } from '@/components/ui/separator';
+import { CriteriaModal } from '@/components/criteria/criteria-modal';
 
 interface LeftPanelProps {
   collapsed: boolean;
@@ -33,15 +35,28 @@ export function LeftPanel({ collapsed }: LeftPanelProps) {
     <div className="h-full p-4 space-y-4">
       <Card>
         <CardHeader>
-          <CardTitle>Project Controls</CardTitle>
+          <CardTitle className="flex items-center gap-2">
+            <Info className="h-5 w-5 text-muted-foreground" />
+            Getting Started
+          </CardTitle>
         </CardHeader>
-        <CardContent>
+        <CardContent className="text-sm text-muted-foreground space-y-4">
+          <p>
+            This AI-powered Screening Tool helps you efficiently sort through papers for your systematic review.
+          </p>
+          <div className="space-y-2">
+            <h4 className="font-medium text-foreground">How it works:</h4>
+            <ol className="list-decimal list-inside space-y-1">
+              <li>Upload your RIS file containing study metadata</li>
+              <li>Define your inclusion/exclusion criteria</li>
+              <li>Let AI analyze each study's title, abstract, and keywords</li>
+              <li>Review AI-generated recommendations (Include/Maybe/Exclude)</li>
+            </ol>
+          </div>
+          <Separator />
           {stage === 'upload' && <FileUpload />}
           <div className="space-y-2 mt-4">
-            <Button className="w-full" variant="outline">
-              <Settings className="mr-2 h-4 w-4" />
-              Criteria Templates
-            </Button>
+            <CriteriaModal />
             <Button className="w-full" variant="outline">
               <Download className="mr-2 h-4 w-4" />
               Export Results
