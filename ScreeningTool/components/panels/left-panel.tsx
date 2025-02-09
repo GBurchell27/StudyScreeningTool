@@ -4,7 +4,7 @@ import { FileUpload } from '@/components/upload/file-upload';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { useWorkflow } from '@/context/workflow-context';
-import { FileText, Settings, Download, Info } from 'lucide-react';
+import { FileText, Settings, Info, Upload, Download } from 'lucide-react';
 import { Separator } from '@/components/ui/separator';
 import { CriteriaModal } from '@/components/criteria/criteria-modal';
 
@@ -25,7 +25,7 @@ export function LeftPanel({ collapsed }: LeftPanelProps) {
           <Settings className="h-4 w-4" />
         </Button>
         <Button variant="ghost" size="icon">
-          <Download className="h-4 w-4" />
+          <Upload className="h-4 w-4" />
         </Button>
       </div>
     );
@@ -57,10 +57,6 @@ export function LeftPanel({ collapsed }: LeftPanelProps) {
           {stage === 'upload' && <FileUpload />}
           <div className="space-y-2 mt-4">
             <CriteriaModal />
-            <Button className="w-full" variant="outline">
-              <Download className="mr-2 h-4 w-4" />
-              Export Results
-            </Button>
           </div>
         </CardContent>
       </Card>
