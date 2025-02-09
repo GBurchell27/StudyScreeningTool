@@ -1,0 +1,37 @@
+Front End UI
+
+This tool to help screen papers for a systematic review. The inputs will be a RIS file (containing meta data of the studies) and the user's inclusion and exclusion criteria. The API will send the RIS file along with the user’s inclusion/exclusion criteria to the backend (to be coded later).
+
+Core Interface Layout Three-Panel Workspace
+
+LEFT PANEL: Project set up & configuration
+    Introduction and how to use this tool
+    Upload RIS file area (Drag-and-Drop Zone)
+    Add inclusion/exclusion criteria
+    Model for inclusion on lefthand side and exclusion on righthand side duel panel set up
+    Upload button to submit RIS file and inex criteria (submits RIS file to backend for parsing and storinging in supabase)
+
+
+CENTER PANEL: Primary workflow area 
+    Post-upload preview: Total studies uploaded from RIS file
+    Displays the inclusion/exclusion criteria previously uploaded in the Left Panel
+    Displays successful upload of parsed RIS file into supabase
+    Run Agent button → kicks off the Agent crew to start querying the supabase database to make decisions. (inex criteria are placed inside the Screening Agents system prompts)
+
+
+RIGHT PANEL: Results review
+    Receives output from the supabase database 
+    Displays real time (Processed/Remaining) Percentage completion
+    Displays number of Included studies, maybe and excluded studies Status coding: Green (Include), Red (Exclude), Yellow (Maybe)
+    Export & Reporting One-Click Export Menu
+    Format options: CSV, RIS, PRISMA-flow compatible JSON
+    Auto-generated PRISMA diagram preview
+    Printable report view alternative
+
+
+FLOATING NOTIFICATION CENTER:
+    API errors
+    Validation warnings
+    Auto-save confirmations
+    Help System
+    Contextual tooltips on field hover

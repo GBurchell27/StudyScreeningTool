@@ -1,5 +1,6 @@
 import { MainLayout } from '@/components/layout/main-layout';
 import { TopBar } from '@/components/layout/top-bar';
+import { Footer } from '@/components/layout/footer';
 
 export default function Home() {
   return (
@@ -20,20 +21,10 @@ export default function Home() {
             <MainLayout />
           </div>
         </main>
+        <Footer/>
         
-        {/* Footer */}
-        <footer className="border-t bg-background/50 backdrop-blur supports-[backdrop-filter]:bg-background/60">
-          <div className="container mx-auto p-4">
-            <div className="flex items-center justify-between text-sm text-muted-foreground">
-              <p>© 2024 Systematic Review Tool. All rights reserved.</p>
-              <div className="flex items-center gap-4">
-                <a href="#" className="hover:text-foreground transition-colors">Privacy Policy</a>
-                <a href="#" className="hover:text-foreground transition-colors">Terms of Service</a>
-                <a href="#" className="hover:text-foreground transition-colors">Contact</a>
-              </div>
-            </div>
-          </div>
-        </footer>
+        
+
       </div>
     </div>
   );

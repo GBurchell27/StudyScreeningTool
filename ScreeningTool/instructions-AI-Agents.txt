@@ -1,0 +1,79 @@
+Multi agent system
+
+This screening tool takes in a RIS file and inclusion/exclusion criteria from the user. 
+RIS file is parsed and uploaded into supabase where each study is a row and columns are the metadata 
+(title, abstract, kewwords ect.. also a decision and rationale column). 
+AI agents then query the database, check wether “decision” column is empty. 
+If empty, study title, abstract, keywords are pulled from the database and the AI agent makes a decision on wether to include/exclude/maybe the study. 
+Once finished,  The user is presented with 4 buttons to download the three RIS files (included, maybe, excluded) and a excel file explaining the reasons for each inclusion/exclusion/maybe.
+
+Stack: next.js (TypeScript), FastAPI (Python), supabase
+Packages: rispy, Open AI, CrewAI
+AI Integration: OpenAI's GPT-4o-mini, CrewAI
+
+Frontend is already built on nextjs where a user uploads a RIS file and uploads their inclusion/exclusion criteria to the backend. 
+ 
+FRONTEND
+    User uploads the RIS file along with the users inclusion/exclusion criteria (inex criteria)
+    (Optional validation)
+    The users inex criteria are first checked to make sure it is not ambiguous (inex criteria text is sent to a LLM model and asked wether the inex criteria is clear)
+    LLM model either confirms or rejects the users input
+    If successful, proceed to sending the risfile and inex criteria to the backend
+    If not, prompt user to try again.
+
+    RIS file + inex criteria are sent to the backend for processing
+
+BACKEND
+    The RIS file is parsed into individual studies (using rispy)
+    Individual studies are further parsed into their respective meta data e.g. Title, abstract, keywords, page numbers, journal ect
+    
+
+    Supabase database storage:
+        Each study is placed into a row in supabase. Each column will be a different meta data e.g. Title, Abstract, keywords, … and an additional column for “decision” and “decision rationale”
+        The original file is also stored in supabase
+
+    LLM Agent Processing
+        Each screening agent's (10 total) system prompt is updated with the user uploaded inex criteria so it knows what it is screening for.
+        For each study, combine relevant metadata (Title, Abstract, Keywords) into a concise prompt and submit it to the LLM.
+        The LLMs output is the decision on wether to include, maybe or exclude the study based on the inex criteria. 
+        It does this by populating the the “decision” column in supabase to either ‘include’, ‘maybe’ or ‘exclude’ along with rationale
+   
+    Output Generation
+        Query Supabase to group studies by decision category.
+        Reassemble the grouped studies into three separate RIS files for “included,” “maybe,” and “excluded.”
+        Generate an Excel file that maps each study with its decision and a short rationale, ensuring traceability.
+    
+    User Feedback & Downloads
+        Present the user with download options for the three RIS files and the Excel report.
+        Optionally provide an interface for the user to review “maybe” cases before finalizing the results.
+
+
+CREW AI OVERVIEW
+    Agents: 
+        Screening Agents (10) with seperate API keys
+        Reporting Agent
+    Establish Connection and Query
+        When an agent starts, it connects to your Supabase database.
+        It queries for studies where the “decision” field is empty (and ideally where no “claim” flag is set).
+    Atomic Claim Attempt
+        For each unprocessed study, the agent attempts an atomic update—using Supabase’s transactional capabilities—to mark that study as “claimed” (for example, by setting a flag or recording its own identifier).
+        If the update succeeds, the agent “locks” that record for its processing; if it fails (because another agent has claimed it simultaneously), the agent skips that record.
+    Processing the Study
+        Once a study is claimed, the agent retrieves the full metadata (title, abstract, etc.) and invokes its LLM-based screening logic using the inclusion/exclusion criteria (the system prompt for all the screening agents will be set prior to running)
+        The agent then derives a decision (include, maybe, or exclude) based on the title, abstract and keywords sent to jt and a brief rationale.
+    Updating the Record
+        After processing, the agent updates the corresponding Supabase record with the decision and rationale, and clears the “claim” flag.
+    Rate Limiting and Delay
+        To prevent overwhelming your LLM API, the agent then waits for a predetermined delay (or uses an exponential backoff strategy) before restarting its polling cycle.
+    Looping Continuously
+        The agent repeats this polling cycle, continuously querying for any new or unclaimed studies until none remain.
+
+This decentralized, atomic-claim approach ensures that each study is processed only once, even if multiple agents are polling simultaneously. It leverages Supabase’s atomic update operations to avoid clashes and CrewAI’s asynchronous execution to manage the load efficiently.
+Reporting Agent:
+  – Once all studies are processed, a reporting agent aggregates the data (counts of included, excluded, and maybe decisions) and generates the final report for the user.
+
+This design leverages CrewAI’s asynchronous, multi-agent orchestration and its hierarchical process management. It allows you to run multiple LLM tasks in parallel while ensuring that each study is eventually processed and recorded. Of course, you’d also need robust error handling, retries, and monitoring to manage API limits and potential failures—but overall, it’s a sound and practical strategy for your screening tool
+In this setup, every screening agent runs its own loop that checks for studies with an empty decision column. When an agent finds an unprocessed study, it first marks that study as “in progress” (using, for example, a status flag or a locking field) to prevent other agents from picking it up simultaneously. Then it processes the study and updates the decision and rationale back to Supabase.
+To ensure that you don’t overburden the LLM API, you’d build in rate limiting or delay logic within each screening agent’s loop. This could be as simple as adding a fixed delay between polls or using a more sophisticated asynchronous throttling mechanism. The key is that each agent is aware of its own “busy” state, so it only makes a new API request when it has finished its current task.
+To avoid clashes when multiple screening agents poll the database simultaneously, you’d implement a task “claiming” mechanism using atomic updates. Each agent, when polling, would run an update query on the Supabase table that sets a “claimed” or “in-progress” flag (or fills a “claimed_by” field) only if the study’s decision field is still empty and it hasn’t already been claimed. This update should be performed as a single atomic transaction so that if two agents try to claim the same study concurrently, only one succeeds.
+
