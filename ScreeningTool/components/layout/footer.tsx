@@ -2,7 +2,7 @@
 
 export function Footer() {
   return (
-    <footer className="border-t bg-background/50 backdrop-blur supports-[backdrop-filter]:bg-background/60">
+    <footer className="border-t bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/95">
       <div className="container mx-auto p-4">
         <div className="flex flex-col sm:flex-row items-center justify-between text-sm text-muted-foreground">
           <p>© 2024 Systematic Review Tool. All rights reserved.</p>
