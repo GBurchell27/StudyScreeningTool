@@ -1,3 +1,19 @@
+/**
+ * Workflow Context: Central State Management
+ * 
+ * This context serves as the central "database" for the frontend, managing:
+ * - Uploaded studies from RIS files
+ * - Inclusion/exclusion criteria
+ * - Processing results from AI analysis
+ * 
+ * Instead of passing data through multiple component levels (prop drilling),
+ * any component can access and update this shared state using:
+ * const { studies, criteria, results } = useWorkflow();
+ * 
+ * This makes state management simpler and more maintainable across the
+ * three-panel layout (left, center, right panels).
+ */
+
 'use client';
 
 import { createContext, useContext, useState, ReactNode } from 'react';
