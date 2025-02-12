@@ -6,17 +6,20 @@ How it works:
 3) Let AI analyze each study's title, abstract, and keywords
 4) Review AI-generated recommendations (Include/Maybe/Exclude)
 
+Windows Computer
 Stack: next.js (TypeScript), FastAPI (Python), supabase
 Packages: rispy, Open AI, CrewAI
 AI Integration: OpenAI's GPT-4o-mini, CrewAI
 
+✅ = completed
+
 Implementation Plan
 1. (completed) Backend Setup
-    Set up FastAPI backend with the required endpoints:
-    /api/upload - For RIS file and criteria upload
-    /api/screen - To trigger screening process
-    /api/status - For checking screening progress
-    /api/download - For downloading results
+    ✅Set up FastAPI backend with the required endpoints:
+    ✅/api/upload - For RIS file and criteria upload
+    ✅/api/screen - To trigger screening process
+    ✅/api/status - For checking screening progress
+    ✅/api/download - For downloading results
     Job Queue System
         Consider adding a job queue for better processing management
         Would help with retry logic and progress tracking
