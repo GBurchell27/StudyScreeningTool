@@ -9,3 +9,63 @@ How it works:
 Stack: next.js (TypeScript), FastAPI (Python), supabase
 Packages: rispy, Open AI, CrewAI
 AI Integration: OpenAI's GPT-4o-mini, CrewAI
+
+Implementation Plan
+1. (completed) Backend Setup
+    Set up FastAPI backend with the required endpoints:
+    /api/upload - For RIS file and criteria upload
+    /api/screen - To trigger screening process
+    /api/status - For checking screening progress
+    /api/download - For downloading results
+    Job Queue System
+        Consider adding a job queue for better processing management
+        Would help with retry logic and progress tracking
+    Monitoring Endpoints
+        Add detailed status endpoints for debugging
+        Implement health checks for each agent
+    Validation Layer
+        Add pre-processing validation for RIS files
+        Implement criteria validation before starting processing    
+2. RIS File Processing
+    Implement RIS file parsing using rispy
+    Extract metadata (title, abstract, keywords, etc.)
+    Structure data for Supabase storage
+    Reference existing endpoint in backend/main.py:
+3. Supabase Integration
+    Set up Supabase project and database
+    Create the studies table using the provided schema:
+    Add necessary indexes for performance
+    Implement database connection and CRUD operations
+4. CrewAI Setup
+    Create the three screening agents and one reporting agent
+    Implement the atomic claim system using the provided SQL pattern:
+    Implement rate limiting and exponential backoff
+5. LLM Integration
+    Set up OpenAI API connection
+    Create system prompts for screening agents
+    Implement prompt engineering for study evaluation
+    Handle API rate limits and errors
+6. Frontend-Backend Connection
+    Update the file upload component to handle RIS files:
+    Implement progress tracking in the right panel:
+    Add real-time updates using WebSocket or polling
+7. Results Processing
+    Implement the reporting agent functionality
+    Create RIS file generation for each category (include/maybe/exclude)
+    Generate Excel report with decisions and rationales
+    Add download functionality in the UI
+8. Error Handling & Validation
+    Add input validation for RIS files and criteria
+    Implement error handling for API calls
+    Add retry mechanisms for failed API requests
+    Show appropriate error messages in the UI
+9. Testing & Optimization
+    Test concurrent agent processing
+    Optimize database queries
+    Add logging and monitoring
+    Performance testing with large RIS files
+10. Documentation
+    API documentation
+    Deployment instructions
+    User guide
+    System architecture documentation

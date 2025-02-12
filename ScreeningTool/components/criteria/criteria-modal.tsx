@@ -37,6 +37,22 @@ const commonCriteria = {
       label: 'Systematic Reviews Only',
       template: 'Study must be a systematic review',
     },
+    {
+      id: 'systematic-reviews-and-meta-analyses',
+      label: 'Systematic Reviews and Meta-Analyses',
+      template: 'Study must be a systematic review or meta-analysis',
+    },
+    {
+      id: 'quantitative-studies-only',
+      label: 'Quantitative Studies Only',
+      template: 'Study must be a quantitative study',
+    },
+    {
+      id: 'qualitative-studies-only',
+      label: 'Qualitative Studies Only',
+      template: 'Study must be a qualitative study',
+    },
+    
   ],
   exclusion: [
     {
@@ -45,19 +61,14 @@ const commonCriteria = {
       template: 'Exclude studies conducted on animals',
     },
     {
-      id: 'case-reports',
-      label: 'Case Reports',
-      template: 'Exclude individual case reports',
-    },
-    {
       id: 'reviews',
       label: 'Review Articles',
       template: 'Exclude literature reviews, systematic reviews, and meta-analyses',
     },
     {
-      id: 'non-empirical',
-      label: 'Non-Empirical',
-      template: 'Exclude theoretical papers and opinion pieces',
+      id: 'case-studies-and-case-reports',
+      label: 'Case Studies and Case Reports',
+      template: 'Exclude case studies and case reports',
     },
   ],
 };
