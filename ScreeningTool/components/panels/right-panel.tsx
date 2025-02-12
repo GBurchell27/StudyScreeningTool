@@ -4,8 +4,9 @@ import { useWorkflow } from '@/context/workflow-context';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { Button } from '@/components/ui/button';
-import { Download, FileJson, FileText, Table, PieChart } from 'lucide-react';
+import { Download, FileJson, FileText, Table, PieChart} from 'lucide-react';
 import { Progress } from '@/components/ui/progress';
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
 
 interface RightPanelProps {
   collapsed: boolean;
@@ -51,14 +52,23 @@ export function RightPanel({ collapsed }: RightPanelProps) {
           <div className="space-y-2">
             <div className="flex justify-between items-center">
               <span className="flex items-center">
-                <Button 
-                  variant="ghost" 
-                  size="icon" 
-                  className="h-6 w-6 mr-2"
-                  onClick={() => {/* Add download handler for included studies */}}
-                >
-                  <FileText className="h-4 w-4" />
-                </Button>
+                <TooltipProvider>
+                  <Tooltip>
+                    <TooltipTrigger asChild>
+                      <Button 
+                        variant="ghost" 
+                        size="icon" 
+                        className="h-6 w-6 mr-2"
+                        onClick={() => {/* Add download handler for included studies */}}
+                      >
+                        <Download className="h-4 w-4" />
+                      </Button>
+                    </TooltipTrigger>
+                    <TooltipContent>
+                      <p>Download included studies</p>
+                    </TooltipContent>
+                  </Tooltip>
+                </TooltipProvider>
                 <div className="w-3 h-3 rounded-full bg-green-500 mr-2" />
                 Included
               </span>
@@ -66,14 +76,23 @@ export function RightPanel({ collapsed }: RightPanelProps) {
             </div>
             <div className="flex justify-between items-center">
               <span className="flex items-center">
-                <Button 
-                  variant="ghost" 
-                  size="icon" 
-                  className="h-6 w-6 mr-2"
-                  onClick={() => {/* Add download handler for maybe studies */}}
-                >
-                  <FileText className="h-4 w-4" />
-                </Button>
+                <TooltipProvider>
+                  <Tooltip>
+                    <TooltipTrigger asChild>
+                      <Button 
+                        variant="ghost" 
+                        size="icon" 
+                        className="h-6 w-6 mr-2"
+                        onClick={() => {/* Add download handler for maybe studies */}}
+                      >
+                        <Download className="h-4 w-4" />
+                      </Button>
+                    </TooltipTrigger>
+                    <TooltipContent>
+                      <p>Download maybe studies</p>
+                    </TooltipContent>
+                  </Tooltip>
+                </TooltipProvider>
                 <div className="w-3 h-3 rounded-full bg-yellow-500 mr-2" />
                 Maybe
               </span>
@@ -81,14 +100,23 @@ export function RightPanel({ collapsed }: RightPanelProps) {
             </div>
             <div className="flex justify-between items-center">
               <span className="flex items-center">
-                <Button 
-                  variant="ghost" 
-                  size="icon" 
-                  className="h-6 w-6 mr-2"
-                  onClick={() => {/* Add download handler for excluded studies */}}
-                >
-                  <FileText className="h-4 w-4" />
-                </Button>
+                <TooltipProvider>
+                  <Tooltip>
+                    <TooltipTrigger asChild>
+                      <Button 
+                        variant="ghost" 
+                        size="icon" 
+                        className="h-6 w-6 mr-2"
+                        onClick={() => {/* Add download handler for excluded studies */}}
+                      >
+                        <Download className="h-4 w-4" />
+                      </Button>
+                    </TooltipTrigger>
+                    <TooltipContent>
+                      <p>Download excluded studies</p>
+                    </TooltipContent>
+                  </Tooltip>
+                </TooltipProvider>
                 <div className="w-3 h-3 rounded-full bg-red-500 mr-2" />
                 Excluded
               </span>
