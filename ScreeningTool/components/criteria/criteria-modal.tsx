@@ -16,6 +16,13 @@ import { Textarea } from '@/components/ui/textarea';
 import { Checkbox } from '@/components/ui/checkbox';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { useWorkflow } from '@/context/workflow-context';
+import { 
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
+import { Info } from 'lucide-react';
 
 const commonCriteria = {
   inclusion: [
@@ -163,15 +170,27 @@ export function CriteriaModal() {
                 ))}
               </div>
             </ScrollArea>
-            <div className="space-y-2">
+            <div className="flex items-center gap-2">
               <Label>Custom Inclusion Criteria</Label>
-              <Textarea
-                placeholder="Enter each criterion on a new line, starting with '- '"
-                value={inclusionCriteria}
-                onChange={(e) => setInclusionCriteria(e.target.value)}
-                className="h-[200px]"
-              />
+              <TooltipProvider>
+                <Tooltip>
+                  <TooltipTrigger asChild>
+                    <Info className="h-4 w-4 text-muted-foreground" />
+                  </TooltipTrigger>
+                  <TooltipContent>
+                    <p>Input specific inclusion criteria based on your research question.</p>
+                    <p>You can also add your own criteria by typing in the text area below.</p>
+                    <p>Enter each criterion on a new line, starting with '- '</p>
+                  </TooltipContent>
+                </Tooltip>
+              </TooltipProvider>
             </div>
+            <Textarea
+              placeholder="Enter each criterion on a new line, starting with '- '"
+              value={inclusionCriteria}
+              onChange={(e) => setInclusionCriteria(e.target.value)}
+              className="h-[200px]"
+            />
           </div>
 
           {/* Exclusion Criteria */}
@@ -195,15 +214,27 @@ export function CriteriaModal() {
                 ))}
               </div>
             </ScrollArea>
-            <div className="space-y-2">
+            <div className="flex items-center gap-2">
               <Label>Custom Exclusion Criteria</Label>
-              <Textarea
-                placeholder="Enter each criterion on a new line, starting with '- '"
-                value={exclusionCriteria}
-                onChange={(e) => setExclusionCriteria(e.target.value)}
-                className="h-[200px]"
-              />
+              <TooltipProvider>
+                <Tooltip>
+                  <TooltipTrigger asChild>
+                    <Info className="h-4 w-4 text-muted-foreground" />
+                  </TooltipTrigger>
+                  <TooltipContent>
+                    <p>Input specific exclusion criteria based on your research question.</p>
+                    <p>You can also add your own criteria by typing in the text area below.</p>
+                    <p>Enter each criterion on a new line, starting with '- '</p>
+                  </TooltipContent>
+                </Tooltip>
+              </TooltipProvider>
             </div>
+            <Textarea
+              placeholder="Enter each criterion on a new line, starting with '- '"
+              value={exclusionCriteria}
+              onChange={(e) => setExclusionCriteria(e.target.value)}
+              className="h-[200px]"
+            />
           </div>
         </div>
 
