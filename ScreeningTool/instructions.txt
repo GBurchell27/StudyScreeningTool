@@ -1,8 +1,8 @@
 This AI-powered Screening Tool helps you efficiently sort through papers for your systematic review.
 
 How it works:
-1) Upload your RIS file containing study metadata
-2) Define your inclusion/exclusion criteria
+1) User uploads RIS file containing study metadata
+2) User uploads their inclusion/exclusion criteria
 3) Let AI analyze each study's title, abstract, and keywords
 4) Review AI-generated recommendations (Include/Maybe/Exclude)
 
