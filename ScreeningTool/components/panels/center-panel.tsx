@@ -4,7 +4,7 @@ import { useWorkflow } from '@/context/workflow-context';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { ScrollArea } from '@/components/ui/scroll-area';
-import { Play, Upload, CheckCircle, AlertCircle } from 'lucide-react';
+import { Play, File, CheckCircle, AlertCircle } from 'lucide-react';
 
 export function CenterPanel() {
   const { studies, criteria } = useWorkflow();
@@ -25,7 +25,7 @@ export function CenterPanel() {
         </div>
         <Button onClick={handleRunAgents} className="gap-2">
           <Play className="h-4 w-4" />
-          Run AI Analysis
+          Run AI Screening
         </Button>
       </div>
 
@@ -33,7 +33,7 @@ export function CenterPanel() {
       <Card>
         <CardHeader>
           <CardTitle className="flex items-center gap-2">
-            <Upload className="h-5 w-5 text-primary" />
+            <File className="h-5 w-5 text-primary" />
             Studies Overview
           </CardTitle>
         </CardHeader>
@@ -68,7 +68,7 @@ export function CenterPanel() {
             <div className="space-y-4">
               <h3 className="font-semibold">Inclusion Criteria</h3>
               <ScrollArea className="h-[200px] border rounded-md p-4">
-                {criteria?.inclusion?.map((item, index) => (
+                {criteria?.inclusion?.map((item: string, index: number) => (
                   <div key={index} className="flex items-start gap-2 py-1">
                     <CheckCircle className="h-4 w-4 text-green-500 mt-1" />
                     <span>{item}</span>
@@ -76,7 +76,7 @@ export function CenterPanel() {
                 ))}
                 {!criteria?.inclusion?.length && (
                   <div className="text-muted-foreground text-center py-4">
-                    No inclusion criteria defined
+                    No inclusion criteria defined yet. Use the panel on the left "Add Criteria" to define your inclusion criteria.
                   </div>
                 )}
               </ScrollArea>
@@ -84,7 +84,7 @@ export function CenterPanel() {
             <div className="space-y-4">
               <h3 className="font-semibold">Exclusion Criteria</h3>
               <ScrollArea className="h-[200px] border rounded-md p-4">
-                {criteria?.exclusion?.map((item, index) => (
+                {criteria?.exclusion?.map((item: string, index: number) => (
                   <div key={index} className="flex items-start gap-2 py-1">
                     <AlertCircle className="h-4 w-4 text-red-500 mt-1" />
                     <span>{item}</span>
@@ -92,7 +92,7 @@ export function CenterPanel() {
                 ))}
                 {!criteria?.exclusion?.length && (
                   <div className="text-muted-foreground text-center py-4">
-                    No exclusion criteria defined
+                    No exclusion criteria defined yet. Use the panel on the left "Add Criteria" to define your exclusion criteria.
                   </div>
                 )}
               </ScrollArea>
