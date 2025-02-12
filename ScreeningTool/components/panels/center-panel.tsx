@@ -15,7 +15,7 @@ export function CenterPanel() {
   };
 
   return (
-    <div className="h-full p-6 space-y-6">
+    <div className="h-full p-6 flex flex-col space-y-6">
       <div className="flex items-center justify-between">
         <div>
           <h1 className="text-3xl font-bold">Study Screening</h1>
@@ -58,19 +58,21 @@ export function CenterPanel() {
         </CardContent>
       </Card>
 
-      {/* Criteria Review */}
-      <Card>
+      {/* Screening Criteria */}
+      <Card className="flex-1 flex flex-col">
         <CardHeader>
           <CardTitle>Screening Criteria</CardTitle>
         </CardHeader>
-        <CardContent>
-          <div className="grid grid-cols-2 gap-6">
-            <div className="space-y-4">
+        <CardContent className="flex-1">
+          <div className="grid grid-cols-2 gap-6 h-full">
+            <div className="space-y-4 flex flex-col">
               <h3 className="font-semibold">Inclusion Criteria</h3>
-              <ScrollArea className="h-[200px] border rounded-md p-4">
+              <ScrollArea className="flex-1 border rounded-md p-4">
                 {criteria?.inclusion?.map((item: string, index: number) => (
                   <div key={index} className="flex items-start gap-2 py-1">
-                    <CheckCircle className="h-4 w-4 text-green-500 mt-1" />
+                    <div className="flex-shrink-0 w-4 h-4">
+                      <CheckCircle className="w-full h-full text-green-500" />
+                    </div>
                     <span>{item}</span>
                   </div>
                 ))}
@@ -81,12 +83,14 @@ export function CenterPanel() {
                 )}
               </ScrollArea>
             </div>
-            <div className="space-y-4">
+            <div className="space-y-4 flex flex-col">
               <h3 className="font-semibold">Exclusion Criteria</h3>
-              <ScrollArea className="h-[200px] border rounded-md p-4">
+              <ScrollArea className="flex-1 border rounded-md p-4">
                 {criteria?.exclusion?.map((item: string, index: number) => (
                   <div key={index} className="flex items-start gap-2 py-1">
-                    <AlertCircle className="h-4 w-4 text-red-500 mt-1" />
+                    <div className="flex-shrink-0 w-4 h-4">
+                      <AlertCircle className="w-full h-full text-red-500" />
+                    </div>
                     <span>{item}</span>
                   </div>
                 ))}
