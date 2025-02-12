@@ -4,7 +4,7 @@ import { FileUpload } from '@/components/upload/file-upload';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { useWorkflow } from '@/context/workflow-context';
-import { FileText, Settings, Info, Upload, Download } from 'lucide-react';
+import { FileText, Settings, Info, Upload, Download, ArrowRight } from 'lucide-react';
 import { Separator } from '@/components/ui/separator';
 import { CriteriaModal } from '@/components/criteria/criteria-modal';
 
@@ -36,7 +36,7 @@ export function LeftPanel({ collapsed }: LeftPanelProps) {
       <Card>
         <CardHeader>
           <CardTitle className="flex items-center gap-2">
-            <Info className="h-5 w-5 text-muted-foreground" />
+            <ArrowRight className="h-5 w-5 text-muted-foreground" />
             Getting Started
           </CardTitle>
         </CardHeader>
