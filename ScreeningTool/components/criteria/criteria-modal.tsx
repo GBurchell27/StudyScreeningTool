@@ -7,6 +7,7 @@ import {
   DialogHeader,
   DialogTitle,
   DialogTrigger,
+  DialogClose,
 } from '@/components/ui/dialog';
 import { Button } from '@/components/ui/button';
 import { Plus } from 'lucide-react';
@@ -14,6 +15,7 @@ import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
 import { Checkbox } from '@/components/ui/checkbox';
 import { ScrollArea } from '@/components/ui/scroll-area';
+import { useWorkflow } from '@/context/workflow-context';
 
 const commonCriteria = {
   inclusion: [
@@ -74,10 +76,12 @@ const commonCriteria = {
 };
 
 export function CriteriaModal() {
+  const [open, setOpen] = useState(false);
   const [inclusionCriteria, setInclusionCriteria] = useState<string>('');
   const [exclusionCriteria, setExclusionCriteria] = useState<string>('');
   const [selectedInclusion, setSelectedInclusion] = useState<string[]>([]);
   const [selectedExclusion, setSelectedExclusion] = useState<string[]>([]);
+  const { setCriteria } = useWorkflow();
 
   const handleInclusionSelect = (id: string, checked: boolean) => {
     if (checked) {
@@ -104,15 +108,27 @@ export function CriteriaModal() {
   };
 
   const handleSubmit = () => {
-    // Handle submission logic here
-    console.log({
-      inclusion: inclusionCriteria,
-      exclusion: exclusionCriteria
+    // Convert string to array by splitting on newlines and filtering empty lines
+    const inclusionArray = inclusionCriteria
+      .split('\n')
+      .map(line => line.trim())
+      .filter(line => line.length > 0);
+      
+    const exclusionArray = exclusionCriteria
+      .split('\n')
+      .map(line => line.trim())
+      .filter(line => line.length > 0);
+
+    setCriteria({
+      inclusion: inclusionArray,
+      exclusion: exclusionArray
     });
+    
+    setOpen(false); // Close the modal after saving
   };
 
   return (
-    <Dialog>
+    <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
         <Button className="w-full" variant="outline">
           <Plus className="mr-2 h-4 w-4" />
@@ -192,9 +208,11 @@ export function CriteriaModal() {
         </div>
 
         <div className="flex justify-end mt-6">
-          <Button onClick={handleSubmit}>
-            Save Criteria
-          </Button>
+          <DialogClose asChild>
+            <Button onClick={handleSubmit}>
+              Save Criteria
+            </Button>
+          </DialogClose>
         </div>
       </DialogContent>
     </Dialog>
