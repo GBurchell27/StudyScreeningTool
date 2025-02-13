@@ -4,9 +4,11 @@ import { useCallback, useState, useRef } from 'react';
 import { useWorkflow } from '@/context/workflow-context';
 import { Card } from '@/components/ui/card';
 import { Upload, Loader2 } from 'lucide-react';
+import { useToast } from "@/hooks/use-toast"
 
 export function FileUpload() {
   const { setStudies, setStage } = useWorkflow();
+  const { toast } = useToast();
   const [isDragging, setIsDragging] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -27,7 +29,8 @@ export function FileUpload() {
     // *** API CALL TO BACKEND ***  
     if (risFile) {
       try {
-        setIsLoading(true); // Add loading state
+        setIsLoading(true);
+        setError(null);
         
         const formData = new FormData();
         formData.append('file', risFile);
@@ -42,11 +45,23 @@ export function FileUpload() {
         }
         
         const data = await response.json();
-        setStudies(data.validated_entries); // Update studies context
+        setStudies(data.validated_entries);
         setStage('criteria');
         
+        // Show success toast
+        toast({
+          title: "File Upload Successful",
+          description: `Successfully processed ${data.study_count} studies from ${risFile.name}`,
+          variant: "default",
+        });
+
       } catch (error) {
-        setError((error as Error).message); // Add error state
+        setError((error as Error).message);
+        toast({
+          title: "Upload Failed",
+          description: (error as Error).message,
+          variant: "destructive",
+        });
       } finally {
         setIsLoading(false);
       }
@@ -74,6 +89,7 @@ export function FileUpload() {
     if (risFile) {
       try {
         setIsLoading(true);
+        setError(null);
         
         const formData = new FormData();
         formData.append('file', risFile);
@@ -91,13 +107,25 @@ export function FileUpload() {
         setStudies(data.validated_entries);
         setStage('criteria');
         
+        // Show success toast
+        toast({
+          title: "File Upload Successful",
+          description: `Successfully processed ${data.study_count} studies from ${risFile.name}`,
+          variant: "default",
+        });
+
       } catch (error) {
         setError((error as Error).message);
+        toast({
+          title: "Upload Failed",
+          description: (error as Error).message,
+          variant: "destructive",
+        });
       } finally {
         setIsLoading(false);
       }
     }
-  }, [setStage, setStudies]);
+  }, [setStage, setStudies, toast]);
 
   return (
     <>
