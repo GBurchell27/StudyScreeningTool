@@ -36,7 +36,9 @@ ER  -"""
             # Parse RIS content
             parsed_entries = await parse_ris_file(test_ris_content.encode())
             print(f"Successfully parsed {len(parsed_entries)} entries")
-            print("Parsed entries structure:", parsed_entries[0].keys())
+            
+            if parsed_entries:
+                print("Sample entry structure:", list(parsed_entries[0].keys()))
             
             # Store in Supabase
             job_id = "test_job_123"
@@ -47,9 +49,11 @@ ER  -"""
             print(f"RIS parsing error: {str(e)}")
         except Exception as e:
             print(f"Unexpected error during processing: {str(e)}")
+            raise  # Re-raise to see full traceback
             
     except Exception as e:
         print(f"Database connection error: {str(e)}")
+        raise  # Re-raise to see full traceback
 
 if __name__ == "__main__":
     # Create and run async event loop

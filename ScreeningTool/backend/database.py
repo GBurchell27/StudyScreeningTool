@@ -38,7 +38,7 @@ class Database:
                     "claimed_at": None
                 }
                 
-                result = await self.client.table("studies").insert(data).execute()
+                result = self.client.table("studies").insert(data).execute()
                 if result.data:
                     stored_count += 1
                 
