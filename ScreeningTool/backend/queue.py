@@ -41,7 +41,7 @@ Related Components:
 from typing import Dict, Optional
 import asyncio
 from datetime import datetime
-from .models import JobStatus, ScreeningCriteria
+from models import JobStatus, ScreeningCriteria
 
 class JobQueue:
     def __init__(self):

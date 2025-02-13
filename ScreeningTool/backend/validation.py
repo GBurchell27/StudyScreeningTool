@@ -1,6 +1,6 @@
 from typing import List, Dict
-from .utils.risfileparsing import parse_ris_file
-from .models import ScreeningCriteria
+from utils.risfileparsing import parse_ris_file
+from models import ScreeningCriteria
 
 async def validate_ris_file(content: bytes) -> List[Dict]:
     """Validate RIS file format and content"""

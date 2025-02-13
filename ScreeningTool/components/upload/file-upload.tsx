@@ -6,6 +6,8 @@ import { Card } from '@/components/ui/card';
 import { Upload, Loader2 } from 'lucide-react';
 import { useToast } from "@/hooks/use-toast"
 
+const MAX_FILE_SIZE = 10 * 1024 * 1024; // 10MB
+
 export function FileUpload() {
   const { setStudies, setStage } = useWorkflow();
   const { toast } = useToast();
@@ -15,6 +17,20 @@ export function FileUpload() {
 
   // Add file input ref
   const fileInputRef = useRef<HTMLInputElement>(null);
+
+  const validateFile = (file: File): boolean => {
+    if (!file.name.endsWith('.ris')) {
+      setError('Please upload a RIS file');
+      return false;
+    }
+
+    if (file.size > MAX_FILE_SIZE) {
+      setError('File size exceeds 10MB limit');
+      return false;
+    }
+
+    return true;
+  };
 
   // Add click handler
   const handleClick = () => {
@@ -26,8 +42,7 @@ export function FileUpload() {
     const files = Array.from(e.target.files || []);
     const risFile = files.find(file => file.name.endsWith('.ris'));
     
-    // *** API CALL TO BACKEND ***  
-    if (risFile) {
+    if (risFile && validateFile(risFile)) {
       try {
         setIsLoading(true);
         setError(null);
@@ -41,7 +56,8 @@ export function FileUpload() {
         });
         
         if (!response.ok) {
-          throw new Error('Upload failed');
+          const errorData = await response.json();
+          throw new Error(errorData.detail || 'Upload failed');
         }
         
         const data = await response.json();
@@ -85,8 +101,8 @@ export function FileUpload() {
     const files = Array.from(e.dataTransfer.files);
     const risFile = files.find(file => file.name.endsWith('.ris'));
     
-    // *** API CALL TO BACKEND ***  
-    if (risFile) {
+    // *** API CALL TO BACKEND *** 
+    if (risFile && validateFile(risFile)) {
       try {
         setIsLoading(true);
         setError(null);
@@ -100,7 +116,8 @@ export function FileUpload() {
         });
         
         if (!response.ok) {
-          throw new Error('Upload failed');
+          const errorData = await response.json();
+          throw new Error(errorData.detail || 'Upload failed');
         }
         
         const data = await response.json();
@@ -162,7 +179,7 @@ export function FileUpload() {
             )}
             {!isLoading && !error && (
               <p className="text-sm text-muted-foreground">
-                Drag and drop your RIS file here
+                Drag and drop your RIS file here (max 10MB)
               </p>
             )}
           </div>

@@ -55,11 +55,13 @@ import rispy
 from datetime import datetime
 
 # Import our custom modules
-from .queue import JobQueue
-from .models import ScreeningCriteria, JobStatus, StudyMetadata
-from .validation import validate_ris_file, validate_criteria
-from .database import init_db, get_db
+from queue import JobQueue
+from models import ScreeningCriteria, JobStatus, StudyMetadata
+from validation import validate_ris_file, validate_criteria
+from database import init_db, get_db
 
+# Constants
+MAX_FILE_SIZE = 10 * 1024 * 1024  # 10MB
 
 app = FastAPI(
     title="Systematic Review Screening API",
@@ -92,12 +94,24 @@ async def upload_ris(
 ) -> Dict:
     """Upload and validate RIS file"""
     if not file.filename.endswith('.ris'):
-        raise HTTPException(400, "Invalid file type. Please upload a RIS file.")
+        raise HTTPException(400, detail="Invalid file type. Please upload a RIS file.")
+    
+    # Check file size
+    file_size = 0
+    content = bytearray()
+    
+    while chunk := await file.read(8192):
+        file_size += len(chunk)
+        if file_size > MAX_FILE_SIZE:
+            raise HTTPException(413, detail="File size exceeds 10MB limit")
+        content.extend(chunk)
     
     try:
         # Validate RIS file
-        file_content = await file.read()
-        validated_entries = await validate_ris_file(file_content)
+        validated_entries = await validate_ris_file(bytes(content))
+        
+        if not validated_entries:
+            raise HTTPException(400, detail="No valid entries found in RIS file")
         
         # Generate job ID
         job_id = str(uuid.uuid4())
@@ -109,10 +123,13 @@ async def upload_ris(
         return {
             "job_id": job_id,
             "message": "File uploaded successfully",
-            "study_count": len(validated_entries)
+            "study_count": len(validated_entries),
+            "validated_entries": validated_entries
         }
+    except ValueError as e:
+        raise HTTPException(400, detail=str(e))
     except Exception as e:
-        raise HTTPException(500, f"Error processing file: {str(e)}")
+        raise HTTPException(500, detail=f"Error processing file: {str(e)}")
 
 # Endpoint to start the screening process
 @app.post("/api/screen/{job_id}")
@@ -136,7 +153,7 @@ async def screen_studies(
             "status": "processing"
         }
     except Exception as e:
-        raise HTTPException(500, f"Error starting screening: {str(e)}")
+        raise HTTPException(500, detail=f"Error starting screening: {str(e)}")
 
 # Endpoint to get the job status
 @app.get("/api/status/{job_id}")
@@ -146,7 +163,7 @@ async def get_status(job_id: str) -> Dict:
         status = await job_queue.get_job_status(job_id)
         return status
     except Exception as e:
-        raise HTTPException(404, f"Job not found: {str(e)}")
+        raise HTTPException(404, detail=f"Job not found: {str(e)}")
 
 # Endpoint to download the screening results
 @app.get("/api/download/{job_id}")
@@ -154,12 +171,12 @@ async def download_results(job_id: str, format: str = "ris") -> Dict:
     """Download screening results"""
     try:
         if format not in ["ris", "excel", "json"]:
-            raise HTTPException(400, "Invalid format requested")
+            raise HTTPException(400, detail="Invalid format requested")
             
         result = await job_queue.get_job_results(job_id, format)
         return result
     except Exception as e:
-        raise HTTPException(404, f"Results not found: {str(e)}")
+        raise HTTPException(404, detail=f"Results not found: {str(e)}")
 
 # Endpoint: Health check endpoint
 @app.get("/api/health")
