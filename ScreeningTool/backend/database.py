@@ -28,7 +28,7 @@ class Database:
             try:
                 data = {
                     "job_id": job_id,
-                    "metadata": entry,
+                    "metadata": entry["metadata"],
                     "title": entry["title"],
                     "abstract": entry["abstract"],
                     "keywords": entry["keywords"],
@@ -38,8 +38,9 @@ class Database:
                     "claimed_at": None
                 }
                 
-                await self.client.table("studies").insert(data).execute()
-                stored_count += 1
+                result = await self.client.table("studies").insert(data).execute()
+                if result.data:
+                    stored_count += 1
                 
             except Exception as e:
                 print(f"Error storing entry: {str(e)}")
