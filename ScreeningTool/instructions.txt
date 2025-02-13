@@ -14,7 +14,7 @@ AI Integration: OpenAI's GPT-4o-mini, CrewAI
 ✅ = completed
 
 Implementation Plan
-1. (completed) Backend Setup
+1. Backend Setup
     ✅Set up FastAPI backend with the required endpoints:
     ✅/api/upload - For RIS file and criteria upload
     ✅/api/screen - To trigger screening process

@@ -83,6 +83,8 @@ job_queue = JobQueue()
 async def startup_event():
     await init_db()
 
+# Endpoint to upload the RIS file and validate it
+# This endpoint is used to upload the RIS file and validate it
 @app.post("/api/upload")
 async def upload_ris(
     file: UploadFile = File(...),
@@ -112,6 +114,7 @@ async def upload_ris(
     except Exception as e:
         raise HTTPException(500, f"Error processing file: {str(e)}")
 
+# Endpoint to start the screening process
 @app.post("/api/screen/{job_id}")
 async def screen_studies(
     job_id: str,
@@ -135,6 +138,7 @@ async def screen_studies(
     except Exception as e:
         raise HTTPException(500, f"Error starting screening: {str(e)}")
 
+# Endpoint to get the job status
 @app.get("/api/status/{job_id}")
 async def get_status(job_id: str) -> Dict:
     """Get detailed job status"""
@@ -144,6 +148,7 @@ async def get_status(job_id: str) -> Dict:
     except Exception as e:
         raise HTTPException(404, f"Job not found: {str(e)}")
 
+# Endpoint to download the screening results
 @app.get("/api/download/{job_id}")
 async def download_results(job_id: str, format: str = "ris") -> Dict:
     """Download screening results"""
@@ -156,6 +161,7 @@ async def download_results(job_id: str, format: str = "ris") -> Dict:
     except Exception as e:
         raise HTTPException(404, f"Results not found: {str(e)}")
 
+# Endpoint: Health check endpoint
 @app.get("/api/health")
 async def health_check() -> Dict:
     """Health check endpoint"""
