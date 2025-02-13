@@ -24,6 +24,7 @@ export function FileUpload() {
     
     if (risFile) {
       // TODO: Handle file upload and parsing
+      // Need to implement actual file upload using fetch/axios to backend
       setStage('criteria');
     }
   };
@@ -47,6 +48,7 @@ export function FileUpload() {
     
     if (risFile) {
       // TODO: Handle file upload and parsing
+      // Need to implement actual file upload using fetch/axios to backend
       setStage('criteria');
     }
   }, [setStage]);

@@ -1,0 +1,45 @@
+Areas for Improvement:
+    ⭕Frontend needs proper error handling and loading states
+    ⭕Could add file size validation before upload
+    ⭕Could implement batch processing for large RIS files
+    ⭕Might want to add more sophisticated validation (e.g., DOI format)
+    ⭕Could add logging for debugging and monitoring
+
+1) Frontend (file-upload.tsx):
+    ✅Validates file extension (.ris)
+    ❌Missing: Need to implement actual file upload using fetch/axios to backend
+    ❌Missing: Should show loading state and error handling
+
+2) Backend (main.py):
+    ✅Receives file and validates extension again (double validation is good!)
+    ✅Reads file content
+    ✅Generates unique job_id for tracking
+    ✅Handles HTTP errors appropriately
+
+3) Validation Layer (validation.py):
+    ✅Acts as a coordinator
+    ✅Checks for empty results
+    ✅Wraps parsing errors in validation context
+    ✅Good: Separates validation concerns from parsing
+
+4) Parsing & Validation (risfileparsing.py):
+    ✅Does both parsing and field-level validation
+    ✅Normalizes data (stripping whitespace, etc.)
+    ✅Validates required fields and data types
+    ✅Good: Combines parsing and validation in one pass
+
+5) Database Layer (database.py):
+    ✅Stores validated and parsed entries
+    ✅Adds metadata like job_id
+    ✅Handles database errors gracefully
+    ✅Good: Keeps track of stored count
+
+6) Frontend (results.tsx):
+    ✅Displays results in a table
+    ✅Shows loading state
+    ✅Handles errors gracefully
+
+
+
+
+
