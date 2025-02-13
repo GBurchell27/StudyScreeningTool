@@ -9,8 +9,19 @@ import { Play, File, CheckCircle, AlertCircle } from 'lucide-react';
 export function CenterPanel() {
   const { studies, criteria } = useWorkflow();
 
-  const handleRunAgents = () => {
-    // TODO: Implement agent processing logic
+  // TODO: Implement agent processing logic
+  // When the button is clicked, it should trigger the AI screening process
+  // The Screening Criteria and sent to the AI agent system prompt
+  // The AI agent starts quering the studies with the screening criteria
+  // The AI agent returns the studies that match the criteria, displayed in the Left Panel
+  // The studies are displayed in the Left Panel as included studies
+  // The AI agent returns the studies that do not match the criteria, displayed in the Left Panel
+  // The studies are displayed in the Left Panel as excluded studies
+  // The AI agent returns the maybe studies, displayed in the Left Panel
+  // The studies are displayed in the Left Panel as maybe studies
+  
+
+  const handleRunAIScreening = () => {
     console.log('Running AI agents...');
   };
 
@@ -23,7 +34,7 @@ export function CenterPanel() {
             Review your studies and criteria before starting the AI analysis
           </p>
         </div>
-        <Button onClick={handleRunAgents} className="gap-2">
+        <Button onClick={handleRunAIScreening} className="gap-2">
           <Play className="h-4 w-4" />
           Run AI Screening
         </Button>

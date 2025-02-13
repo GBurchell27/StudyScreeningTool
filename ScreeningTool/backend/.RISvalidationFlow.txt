@@ -2,13 +2,12 @@ Areas for Improvement:
     ⭕Frontend needs proper error handling and loading states
     ⭕Could add file size validation before upload
     ⭕Could implement batch processing for large RIS files
-    ⭕Might want to add more sophisticated validation (e.g., DOI format)
     ⭕Could add logging for debugging and monitoring
 
 1) Frontend (file-upload.tsx):
     ✅Validates file extension (.ris)
     ❌Missing: Need to implement actual file upload using fetch/axios to backend
-    ❌Missing: Should show loading state and error handling
+    ❌Missing: Error handling
 
 2) Backend (main.py):
     ✅Receives file and validates extension again (double validation is good!)
@@ -34,10 +33,11 @@ Areas for Improvement:
     ✅Handles database errors gracefully
     ✅Good: Keeps track of stored count
 
-6) Frontend (results.tsx):
-    ✅Displays results in a table
-    ✅Shows loading state
-    ✅Handles errors gracefully
+6) Update the frontend upload handler to:
+    ❌Missing: Make the API call to /api/upload
+    ❌Missing: Show loading state during upload
+    ❌Missing: Handle the response and update the studies context
+    ❌Missing: Display any errors
 
 
 
